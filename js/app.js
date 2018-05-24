@@ -9,6 +9,7 @@ var evenAddScroe = 10;
 var num1, num2, num3, num4, num5;
 var letterArr = []
 var letterConArr = []
+var speed = 2
 var scoreCon = document.getElementsByClassName('score-container')[0]
 var startBtn = document.getElementsByClassName('start-btn')[0]
 for(var i=0;i<numberLength;i++){
@@ -28,6 +29,7 @@ startBtn.onclick = function(){
 
 function start() {
     score = 0;
+    speed = 2;
     scoreCon.innerHTML = score;
     if(time) clearInterval(time);
     time = setInterval("move()", msec);
@@ -46,11 +48,11 @@ function move() {
             letterConArr[i].innerHTML = letter[letterArr[i]];
         }
         if (styleTop < highest) {
-            letterConArr[i].style.top = styleTop + 2+'px';
+            letterConArr[i].style.top = styleTop + speed+'px';
         } else {
             clearInterval(time);
             startBtn.innerText = "开始";
-            gameOver()
+            gameOver(score)
             break;
         }
     }
@@ -70,6 +72,13 @@ function keydown(e) {
 
 function addScroe() {
     score += evenAddScroe;
+    if(score > 100 && score < 400){
+        speed = 4
+    } else if(score >= 400 && score < 800){
+        speed = 8
+    } else if(score >= 800) {
+        speed = 16
+    }
     scoreCon.innerHTML = score;
 }
 
