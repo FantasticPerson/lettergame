@@ -42,7 +42,7 @@
     </script>
     <script src="./js/app.js"></script>
     <script>
-        var dappAddress = "n1yHUdAHhHaVdDYusHRYiLqL2zFC1qBjAeT";
+        var dappAddress = "n1nKv39ZCAry3W938u6ua5Mi8tCCRMsvHWo";
         var nebulas = require("nebulas")
         var NebPay = require("nebpay");     //https://github.com/nebulasio/nebPay
         var nebPay = new NebPay();
@@ -50,7 +50,8 @@
         var intervalQuery
         Account = nebulas.Account,
         neb = new nebulas.Neb();
-        neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
+        neb.setRequest(new nebulas.HttpRequest("https://mainnet.nebulas.io"));//https://mainnet.nebulas.io
+            //https://testnet.nebulas.io
 
         function gameOver(point){
             var to = dappAddress;
@@ -59,17 +60,17 @@
             var callArgs = "[\"" + point + "\"]"
 
             serialNumber = nebPay.call(to, value, callFunction, callArgs, {    //使用nebpay的call接口去调用合约,
-                listener: cbPush        //设置listener, 处理交易返回信息
+                // listener: cbPush ,       //设置listener, 处理交易返回信息,
+                // callback: "https://mainnet.nebulas.io"
             });
 
-            intervalQuery = setInterval(function () {
-                funcIntervalQuery();
-            }, 5000);
+            // intervalQuery = setInterval(function () {
+            //     funcIntervalQuery();
+            // }, 10000);
         }
 
         function funcIntervalQuery() {
-            console.log(serialNumber)
-            nebPay.queryPayInfo(serialNumber)   
+            nebPay.queryPayInfo(serialNumber,{callback: "https://mainnet.nebulas.io"})   
                 .then(function (resp) {
                     console.log("tx result: " + resp)   
                     var respObject = JSON.parse(resp)
@@ -80,7 +81,7 @@
                         setTimeout(function(){
                             getTopRank()
                             getRecord()
-                        },1000)
+                        },10000)
                         
                     }
                 })
@@ -93,9 +94,9 @@
             console.log("response of push: " + JSON.stringify(resp))
         }
 
-        function submit(resp){
-            console.log(resp)
-        }
+        // function submit(resp){
+        //     console.log(resp)
+        // }
 
         function getTopRank() {
             var to = dappAddress;
@@ -121,8 +122,6 @@
             console.log(res)
         }
 
-        getTopRank()
-
         function getRecord() {
             var to = dappAddress;
             var value = 0;
@@ -147,7 +146,10 @@
             console.log(res)
         }
 
-        getRecord()
+        setInterval(function () {
+            getTopRank()
+            getRecord()
+        }, 15000);
     </script>
 </body>
 </html>

@@ -61,7 +61,7 @@ LetterGameContract.prototype = {
         if(record){
             return record
         } else {
-            throw new Error('还没有记录')
+            throw new Error({txt:'还没有记录',addr:addr})
         }
     },
     getTopRank:function(){
@@ -90,9 +90,7 @@ LetterGameContract.prototype = {
         var addr = nRecord.address
         var oRecord = this.records.get(addr)
         if(oRecord){
-            if(parseInt(nRecord.point) > parseInt(oRecord)){
-                this.records.set(addr,nRecord)
-            } else {
+            if(parseInt(nRecord.point) > parseInt(oRecord.point)){
                 this.records.set(addr,nRecord)
             }
         } else {
